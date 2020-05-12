@@ -1,0 +1,8 @@
+Escenarios:
+La casa | Esposa e hijo
+El trabajo | Compas de trabajo. Fernando. Maria. 
+Los viajes. | Chofer del colectivo. Te llevo un amigo en auto.
+Salida con amigos. | Fiesta.
+
+
+

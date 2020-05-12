@@ -1,0 +1,5 @@
+1| "Hola como estas?" "Bien_2" "Maso_3"
+2| "Quiero preguntarte esto?" "Dale_3" "No_4"
+3| "Esta es la cuarta pregunta?" "Si_5" "No_4"
+4| "Por que te metiste aca?" "No se_5" "Porque quiero divertirme_2"
+5| "Que onda estas preguntas?" "Ok_4" "No ahora_1"
