@@ -2,25 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MoverBola : MonoBehaviour
+public class MoverAuto : MonoBehaviour
 {
-    public bool muestroOculto = true;
 
-    // :3 :$
+    // :3 :$ <3
     public bool noeEsTierna = true;
 
-    GameObject elCilindro;
 
     // Start is called before the first frame update
     void Start()
     {
-        //Debug.Log("Codigo MoverCubo inicializado..");
-        elCilindro = GameObject.Find("Ocultar");
-
-        if (elCilindro == null)
-        {
-            Debug.LogError("Capo no encuentro el cilindro");
-        }
     }
 
     // Update is called once per frame
@@ -46,11 +37,6 @@ public class MoverBola : MonoBehaviour
         {
             ejercerFuerza(1, 0);
         }
-
-        if (muestroOculto)
-        {
-            elCilindro.SetActive(true);
-        }
     }
 
     void ejercerFuerza(int offsetX, int offsetZ)
@@ -66,22 +52,6 @@ public class MoverBola : MonoBehaviour
         }*/
         // .gameObject | el gameObject con el que colisione
         // .name string nombre
-        if (collision.gameObject.name == "Destruir")
-        {
-            Debug.Log("No me quiero ir señor stark");
-            Destroy(collision.gameObject);
-        }
-        if (collision.gameObject.name == "Ocultar")
-        {
-            Debug.Log("Ocultandome... adiooos");
-            collision.gameObject.SetActive(false);
-            muestroOculto = false;
-        }
-        if (collision.gameObject.name == "Invisible")
-        {
-            // collision.gameObject.GetComponent<MeshRenderer>().enabled(false);
-            Debug.Log("Tocaste el objeto invisible muahahaha");
-        }
     }
 
 

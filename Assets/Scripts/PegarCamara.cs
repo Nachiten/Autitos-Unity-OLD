@@ -5,20 +5,21 @@ using UnityEngine;
 public class PegarCamara : MonoBehaviour
 {
     Transform transformCamara;
-    Transform transformBola;
+    public GameObject auto;
+    Transform transformAuto;
 
     // Start is called before the first frame update
     void Start()
     {
         transformCamara = this.gameObject.GetComponent<Transform>();
 
-        transformBola = GameObject.Find("Bola").GetComponent<Transform>();
+        transformAuto = auto.GetComponent<Transform>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        Vector3 posicionCamara = new Vector3(transformBola.position.x, transformBola.position.y + 3.78f, transformBola.position.z -3.88f);
+        Vector3 posicionCamara = new Vector3(transformAuto.position.x, transformAuto.position.y + 3.78f, transformAuto.position.z -3.88f);
 
         transformCamara.position = posicionCamara;
     }
