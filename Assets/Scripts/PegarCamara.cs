@@ -4,23 +4,42 @@ using UnityEngine;
 
 public class PegarCamara : MonoBehaviour
 {
-    Transform transformCamara;
-    public GameObject auto;
-    Transform transformAuto;
+    // Variables
+    float sensibilidad = 2;
+
+    GameObject jugador;
+    GameObject referencia;
+    Vector3 distancia;
 
     // Start is called before the first frame update
     void Start()
     {
-        transformCamara = this.gameObject.GetComponent<Transform>();
+        // Asignar los Game Objects
+        referencia = GameObject.Find("Referencia");
+        jugador = GameObject.Find("Car_1");
 
-        transformAuto = auto.GetComponent<Transform>();
+        //Asignar Distancia
+        distancia = this.transform.position - jugador.transform.position;
     }
 
     // Update is called once per frame
-    void Update()
+    void LateUpdate()
     {
-        Vector3 posicionCamara = new Vector3(transformAuto.position.x, transformAuto.position.y + 3.78f, transformAuto.position.z -3.88f);
 
-        transformCamara.position = posicionCamara;
+        // Calcula la distancia del jugador
+        distancia = Quaternion.AngleAxis(Input.GetAxis("Mouse X") * sensibilidad, Vector3.up) * distancia;
+
+        // La camara cambia su posicion respecto a la posicion del jugador
+        transform.position = jugador.transform.position + distancia;
+
+        // La camara mira hacia el jugador
+        transform.LookAt(jugador.transform.position);
+
+        // Referencia para que los controles no cambien
+        Vector3 copiarRotacion = new Vector3(0, transform.eulerAngles.y, 0);
+        // Rotar la referencia
+        referencia.transform.eulerAngles = copiarRotacion;
     }
+
+
 }
