@@ -10,6 +10,7 @@ public class PegarCamara : MonoBehaviour
     GameObject jugador;
     GameObject referencia;
     Vector3 distancia;
+    public Vector3 offset;
 
     // Start is called before the first frame update
     void Start()
@@ -30,13 +31,14 @@ public class PegarCamara : MonoBehaviour
         distancia = Quaternion.AngleAxis(Input.GetAxis("Mouse X") * sensibilidad, Vector3.up) * distancia;
 
         // La camara cambia su posicion respecto a la posicion del jugador
-        transform.position = jugador.transform.position + distancia;
+        transform.position = jugador.transform.position + distancia + offset;
 
         // La camara mira hacia el jugador
         transform.LookAt(jugador.transform.position);
 
         // Referencia para que los controles no cambien
         Vector3 copiarRotacion = new Vector3(0, transform.eulerAngles.y, 0);
+
         // Rotar la referencia
         referencia.transform.eulerAngles = copiarRotacion;
     }

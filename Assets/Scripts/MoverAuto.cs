@@ -1,6 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Numerics;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MoverAuto : MonoBehaviour
 {
@@ -8,50 +8,53 @@ public class MoverAuto : MonoBehaviour
     // :3 :$ <3
     public bool noeEsTierna = true;
 
+    //Variables
+    GameObject referencia;
+    GameObject textoVelocidad;
+    Rigidbody rb;
+    Text texto;
 
-    // Start is called before the first frame update
+    float speed = 17;
+    float maxSpeed = 27;
+
+    /* -------------------------------------------------------------------------------- */
+
+    // Llamado al inicio
     void Start()
     {
+        referencia = GameObject.Find("Referencia");
+
+        rb = this.GetComponent<Rigidbody>();
+
+        if (rb == null) {
+            Debug.Log("No encontre el RB");
+        }
+
+        //Debug.Log("referencia.transform.forward: " + referencia.transform.forward);
+        //Debug.Log("referencia.transform.right: " + referencia.transform.right);
     }
 
-    // Update is called once per frame
-    void Update()
+    /* -------------------------------------------------------------------------------- */
+
+    // Se llama cada fotograma
+    void FixedUpdate()
     {
-        if (Input.GetKey("w")) // Mover adelante
+        float moverHorizontal = Input.GetAxis("Horizontal");
+        float moverVertical = Input.GetAxis("Vertical");
+
+        if (rb.velocity.magnitude > maxSpeed)
         {
-            ejercerFuerza(0, 1);
+            rb.velocity = rb.velocity.normalized * maxSpeed;
         }
 
-        if (Input.GetKey("s")) // Mover atras
-        {
-            ejercerFuerza(0, -1);
-        }
+        UnityEngine.Vector3 vectorVetical = moverVertical * referencia.transform.forward * speed;
+        UnityEngine.Vector3 vectorHorizontal = moverHorizontal * referencia.transform.right * speed;
 
-        if (Input.GetKey("a")) // Mover izquierda
-        {
-            ejercerFuerza(-1, 0);
-        }
+        //Debug.Log("Vector vertical: " + vectorVetical);
+        //Debug.Log("Vector horizontal: " + vectorHorizontal);
 
-        if (Input.GetKey("d")) // Mover derecha
-        // GetKeyDown [Key = Tecla, Down = Apretar, Up = Soltar] || GetKeyUp es otra opcion
-        {
-            ejercerFuerza(1, 0);
-        }
-    }
-
-    void ejercerFuerza(int offsetX, int offsetZ)
-    {
-        this.gameObject.GetComponent<Rigidbody>().AddForce(2000 * Time.deltaTime * offsetX, 0, 2000 * Time.deltaTime * offsetZ);
-    }
-
-    void OnCollisionEnter(Collision collision)
-    {
-        /*if (!(collision.gameObject.name == "Plano")) {
-            Debug.Log("Toque un pino :D");
-            this.enabled = false;
-        }*/
-        // .gameObject | el gameObject con el que colisione
-        // .name string nombre
+        rb.AddForce(vectorVetical);
+        rb.AddForce(vectorHorizontal);
     }
 
 
