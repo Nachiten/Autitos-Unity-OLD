@@ -22,12 +22,19 @@ public class MoverAuto : MonoBehaviour
     // Llamado al inicio
     void Start()
     {
+        /* OBSOLETO (depracated)
         referencia = GameObject.Find("Referencia");
+
+        // Checkeo de errores
+        if (referencia == null) {
+            Debug.LogError("No pude encontrar al objeto llamado 'Referencia'");
+        }*/
 
         rb = this.GetComponent<Rigidbody>();
 
+        // Checkeo de errores
         if (rb == null) {
-            Debug.Log("No encontre el RB");
+            Debug.LogError("No encontre el RB del auto");
         }
 
         //Debug.Log("referencia.transform.forward: " + referencia.transform.forward);
@@ -47,14 +54,16 @@ public class MoverAuto : MonoBehaviour
             rb.velocity = rb.velocity.normalized * maxSpeed;
         }
 
-        UnityEngine.Vector3 vectorVetical = moverVertical * referencia.transform.forward * speed;
-        UnityEngine.Vector3 vectorHorizontal = moverHorizontal * referencia.transform.right * speed;
+        UnityEngine.Vector3 vectorAdelante = moverVertical * this.transform.forward * speed;
 
-        //Debug.Log("Vector vertical: " + vectorVetical);
-        //Debug.Log("Vector horizontal: " + vectorHorizontal);
+        // TODO: Voltear de manera normal no directo a la derecha (sumando el vector adelante)
+        UnityEngine.Vector3 vectorLateral = moverHorizontal * this.transform.right * speed;
 
-        rb.AddForce(vectorVetical);
-        rb.AddForce(vectorHorizontal);
+        // Debug.Log("vectorAdelante: " + vectorAdelante);
+        // Debug.Log("vectorLateral: " + vectorLateral);
+
+        rb.AddForce(vectorAdelante);
+        rb.AddForce(vectorLateral);
     }
 
 
