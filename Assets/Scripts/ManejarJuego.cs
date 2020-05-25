@@ -14,14 +14,16 @@ public class ManejarJuego : MonoBehaviour
     static Material checkpointProximo;
     static Material checkpointTocado;
     static Material checkpointNoToca;
-    static GameObject[] checkPointsVisibles;
 
     private void Start()
     {
+
+        // Se asignan los 3 materiales de colores distintos
         checkpointProximo = Resources.Load<Material>("Materials/CheckpointProximo");
         checkpointTocado = Resources.Load<Material>("Materials/CheckpointTocado");
         checkpointNoToca = Resources.Load<Material>("Materials/CheckpointNoToca");
 
+        // Chequeo de errores
         if (checkpointProximo == null) {
             Debug.LogError("No pude encontrar la textura de checkpointProximo");
         }
@@ -37,14 +39,6 @@ public class ManejarJuego : MonoBehaviour
         }
 
         GameObject[] losCheckpoints = GameObject.FindGameObjectsWithTag("Checkpoint");
-        checkPointsVisibles = GameObject.FindGameObjectsWithTag("CheckpointVisible");
-
-        if (losCheckpoints.Length != checkPointsVisibles.Length) {
-            Debug.LogError("Hay una incosistencia entre los checkpoints y checkpoints visibles");
-        }
-
-        checkearErroresDe(losCheckpoints);
-        checkearErroresDe(checkPointsVisibles);
 
         checkpointsTotales = losCheckpoints.Length;
     }
@@ -61,25 +55,35 @@ public class ManejarJuego : MonoBehaviour
     }
 
     public static void tocarUnCheckpoint(GameObject elCheckpoint) {
+
+        // Obtener el numero del checkpoint tocado
         int numeroDeCheckpoint = short.Parse(elCheckpoint.name.Substring(elCheckpoint.name.Length - 1));
         Debug.Log("El numero de checkpoint tocado es: " + numeroDeCheckpoint);
 
-        if (numeroDeCheckpoint == checkpointATocar) {
+        // Es el checkpoint que hay que tocar
+        if (numeroDeCheckpoint == checkpointATocar)
+        {
             Debug.Log("Tocaste el checkpoint indicado");
             checkpointATocar++;
+
+            // Ya toque todos los checkpoints
+            if (checkpointATocar > checkpointsTotales)
+            {
+                Debug.Log("Tocaste ya todos los checkpoint");
+                // Puede tocar la meta desde aca :D
+            }
+            else
+            {
+                // Se setea el checkpoint siguiente a el color amarillo
+                GameObject.Find("Cubo Checkpoint " + (numeroDeCheckpoint + 1)).GetComponent<MeshRenderer>().material = checkpointProximo;
+            }
+
+            // Se setea el checkpoint actual a ser verde
+            GameObject.Find("Cubo Checkpoint " + numeroDeCheckpoint).GetComponent<MeshRenderer>().material = checkpointTocado;
+
         }
-
-        if (checkpointATocar > checkpointsTotales)
-        {
-            Debug.Log("Tocaste ya todos los checkpoint");
+        else {
+            Debug.Log("El checkpoint que tocaste no sirve para nada");
         }
-        else 
-        {
-            GameObject.Find("Cubo Checkpoint " + (numeroDeCheckpoint + 1)).GetComponent<MeshRenderer>().material = checkpointProximo;
-        }
-
-        GameObject.Find("Cubo Checkpoint " + numeroDeCheckpoint).GetComponent<MeshRenderer>().material = checkpointTocado;
-
-
     }
 }
