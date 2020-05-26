@@ -1,4 +1,4 @@
-﻿using System.Numerics;
+﻿using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,26 +19,15 @@ public class MoverAuto : MonoBehaviour
 
     /* -------------------------------------------------------------------------------- */
 
-    // Llamado al inicio
+    // Llamado al inicio una unica vez
     void Start()
     {
-        /* OBSOLETO (depracated)
-        referencia = GameObject.Find("Referencia");
-
-        // Checkeo de errores
-        if (referencia == null) {
-            Debug.LogError("No pude encontrar al objeto llamado 'Referencia'");
-        }*/
-
         rb = this.GetComponent<Rigidbody>();
 
         // Checkeo de errores
         if (rb == null) {
             Debug.LogError("No encontre el RB del auto");
         }
-
-        //Debug.Log("referencia.transform.forward: " + referencia.transform.forward);
-        //Debug.Log("referencia.transform.right: " + referencia.transform.right);
     }
 
     /* -------------------------------------------------------------------------------- */
@@ -54,16 +43,35 @@ public class MoverAuto : MonoBehaviour
             rb.velocity = rb.velocity.normalized * maxSpeed;
         }
 
-        UnityEngine.Vector3 vectorAdelante = moverVertical * this.transform.forward * speed;
+        Vector3 vectorAdelante = moverVertical * this.transform.forward * speed;
 
         // TODO: Voltear de manera normal no directo a la derecha (sumando el vector adelante)
-        UnityEngine.Vector3 vectorLateral = moverHorizontal * this.transform.right * speed;
+        //Vector3 vectorLateral = moverHorizontal * (this.transform.right + new Vector3(0,0,1) )  * speed;
 
-        // Debug.Log("vectorAdelante: " + vectorAdelante);
-        // Debug.Log("vectorLateral: " + vectorLateral);
+        // Voltear a la derecha
+        if (Input.GetKey("d")) 
+        {
+            // Se gira proporcional a la velocidad de movimiento
+            girarHacia( 0.5f / 3 );
+        }
+
+        // Voltear a la izquierda
+        if (Input.GetKey("a"))
+        {
+            // Se gira proporcional a la velocidad de movimiento
+            girarHacia( -0.5f / 3 );
+        }
+
+        //Debug.Log(this.transform.eulerAngles);
+
+        //Debug.Log("La velocidad es: " + rb.velocity.magnitude);
 
         rb.AddForce(vectorAdelante);
-        rb.AddForce(vectorLateral);
+        //rb.AddForce(vectorLateral);
+    }
+
+    void girarHacia(float unValor) {
+        this.transform.Rotate(0, rb.velocity.magnitude * unValor, 0);
     }
 
 
