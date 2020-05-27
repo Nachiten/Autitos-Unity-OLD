@@ -10,16 +10,21 @@ public class ManejarJuego : MonoBehaviour
 
     static int checkpointATocar = 1;
     static int checkpointsTotales;
+    static int vueltasActuales = 0;
 
     static Material checkpointProximo;
     static Material checkpointTocado;
     static Material checkpointNoToca;
 
+    static bool terminoVuelta = false;
+
     private void Start()
     {
         inicializarTexturas();
 
-        calcularCantidadCheckpoints();
+        checkpointsTotales = cantidadCheckpoints();
+
+        Debug.Log("La cantidad de checkpoints en este nivel es: " + checkpointsTotales);
 
         asignarTextuasIniciales();
         
@@ -48,19 +53,18 @@ public class ManejarJuego : MonoBehaviour
         }
     }
 
-    void calcularCantidadCheckpoints() {
+    public static int cantidadCheckpoints() {
         GameObject[] losCheckpoints = GameObject.FindGameObjectsWithTag("Checkpoint");
 
         if (losCheckpoints.Length == 0)
         {
             Debug.LogError("No encontré ningun objeto checkpoint");
         }
-
-        checkpointsTotales = losCheckpoints.Length;
-        Debug.Log("La cantidad de checkpoints en este nivel es: " + checkpointsTotales);
+        
+        return losCheckpoints.Length;
     }
 
-    void asignarTextuasIniciales() {
+    static void asignarTextuasIniciales() {
 
         for (int i = 1; i <= checkpointsTotales; i++) {
             if (i == 1)
@@ -79,6 +83,10 @@ public class ManejarJuego : MonoBehaviour
         // Es el checkpoint que hay que tocar
         if (numeroDeCheckpoint == checkpointATocar)
         {
+
+            // Modifico UI valor de checkpoint tocado
+            ManejarUI.valorDeCheckpointA(numeroDeCheckpoint);
+
             Debug.Log("Tocaste el checkpoint indicado");
             checkpointATocar++;
 
@@ -87,6 +95,7 @@ public class ManejarJuego : MonoBehaviour
             {
                 Debug.Log("Tocaste ya todos los checkpoint");
                 // Puede tocar la meta desde aca :D
+                terminoVuelta = true;
             }
             else
             {
@@ -100,6 +109,25 @@ public class ManejarJuego : MonoBehaviour
         }
         else {
             Debug.Log("El checkpoint que tocaste no sirve para nada");
+        }
+    }
+
+    public static void verSiGano() {
+        if (terminoVuelta)
+        {
+            Debug.Log("Terminaste la vuelta");
+
+            // Modificar UI de cantidadVueltas
+            ManejarUI.valorDeVueltaA(++vueltasActuales);
+
+            // Reseteo valores iniciales para comenzar siguiente vuelta
+            terminoVuelta = false;
+            asignarTextuasIniciales();
+            checkpointATocar = 1;
+            ManejarUI.valorDeCheckpointA(0);
+        }
+        else {
+            Debug.LogWarning("Todavia no tocaste todos los checkpoints");
         }
     }
 }
