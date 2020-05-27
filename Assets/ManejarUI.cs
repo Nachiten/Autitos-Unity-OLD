@@ -14,7 +14,7 @@ public class ManejarUI : MonoBehaviour
 
     private void Start() {
 
-        config = Resources.Load<DatosConfig>("Scripts/Config");
+        config = Resources.Load<DatosConfig>("Scripts/ConfigNivel1");
 
         vueltasTotales = config.vueltasTotales;
 
