@@ -16,12 +16,14 @@ public class ManejarJuego : MonoBehaviour
     static Material checkpointTocado;
     static Material checkpointNoToca;
 
-    public DatosConfig config;
+    DatosConfig config;
 
     static bool terminoVuelta = false;
 
     private void Start()
     {
+        config = Resources.Load<DatosConfig>("Scripts/Config");
+
         vueltasTotales = config.vueltasTotales;
 
         inicializarTexturas();
@@ -144,7 +146,7 @@ public class ManejarJuego : MonoBehaviour
             vueltasActuales++;
         }
         else {
-            Debug.LogWarning("Todavia no tocaste todos los checkpoints");
+            Debug.Log("Todavia no tocaste todos los checkpoints");
         }
     }
 }

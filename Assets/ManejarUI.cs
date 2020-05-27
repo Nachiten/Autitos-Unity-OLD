@@ -10,11 +10,11 @@ public class ManejarUI : MonoBehaviour
     static Text textoCheckpoint;
     static Text textoVuelta;
 
-    public DatosConfig config;
+    DatosConfig config;
 
     private void Start() {
 
-        // = new Config();
+        config = Resources.Load<DatosConfig>("Scripts/Config");
 
         vueltasTotales = config.vueltasTotales;
 
