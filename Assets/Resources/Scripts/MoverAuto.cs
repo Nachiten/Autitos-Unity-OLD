@@ -35,18 +35,19 @@ public class MoverAuto : MonoBehaviour
     // Se llama cada fotograma
     void FixedUpdate()
     {
-        float moverHorizontal = Input.GetAxis("Horizontal");
         float moverVertical = Input.GetAxis("Vertical");
 
+        // Limitar a velocidad maxima
         if (rb.velocity.magnitude > maxSpeed)
         {
             rb.velocity = rb.velocity.normalized * maxSpeed;
         }
 
+        // Calcular vector fuerza hacia adelante
         Vector3 vectorAdelante = moverVertical * this.transform.forward * speed;
 
-        // TODO: Voltear de manera normal no directo a la derecha (sumando el vector adelante)
-        //Vector3 vectorLateral = moverHorizontal * (this.transform.right + new Vector3(0,0,1) )  * speed;
+        // Ejercer fuerza hacia adelante
+        rb.AddForce(vectorAdelante);
 
         // Voltear a la derecha
         if (Input.GetKey("d")) 
@@ -61,15 +62,9 @@ public class MoverAuto : MonoBehaviour
             // Se gira proporcional a la velocidad de movimiento
             girarHacia( -0.5f / 3 );
         }
-
-        //Debug.Log(this.transform.eulerAngles);
-
-        //Debug.Log("La velocidad es: " + rb.velocity.magnitude);
-
-        rb.AddForce(vectorAdelante);
-        //rb.AddForce(vectorLateral);
     }
 
+    // Rotar auto hacia los costados
     void girarHacia(float unValor) {
         this.transform.Rotate(0, rb.velocity.magnitude * unValor, 0);
     }
