@@ -6,20 +6,24 @@ using UnityEngine;
 
 public class ManejarJuego : MonoBehaviour
 {
-    //bool[] arraysTocados;
+    static int vueltasTotales;
+    static int checkpointsTotales;
 
     static int checkpointATocar = 1;
-    static int checkpointsTotales;
     static int vueltasActuales = 0;
 
     static Material checkpointProximo;
     static Material checkpointTocado;
     static Material checkpointNoToca;
 
+    public DatosConfig config;
+
     static bool terminoVuelta = false;
 
     private void Start()
     {
+        vueltasTotales = config.vueltasTotales;
+
         inicializarTexturas();
 
         checkpointsTotales = cantidadCheckpoints();
@@ -28,6 +32,10 @@ public class ManejarJuego : MonoBehaviour
 
         asignarTextuasIniciales();
         
+    }
+
+    public static int getVueltasTotales() {
+        return vueltasTotales;
     }
 
     void inicializarTexturas() {
@@ -115,16 +123,25 @@ public class ManejarJuego : MonoBehaviour
     public static void verSiGano() {
         if (terminoVuelta)
         {
-            Debug.Log("Terminaste la vuelta");
 
             // Modificar UI de cantidadVueltas
-            ManejarUI.valorDeVueltaA(++vueltasActuales);
+            ManejarUI.valorDeVueltaA(vueltasActuales + 1);
+
+            if (vueltasActuales + 1 == vueltasTotales)
+            {
+                Debug.Log("Ganaste capoeira :D");
+                return;
+            }
+
+            Debug.Log("Terminaste la vuelta");
 
             // Reseteo valores iniciales para comenzar siguiente vuelta
             terminoVuelta = false;
             asignarTextuasIniciales();
             checkpointATocar = 1;
             ManejarUI.valorDeCheckpointA(0);
+
+            vueltasActuales++;
         }
         else {
             Debug.LogWarning("Todavia no tocaste todos los checkpoints");

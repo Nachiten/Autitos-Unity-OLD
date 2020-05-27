@@ -5,12 +5,18 @@ using UnityEngine.UI;
 
 public class ManejarUI : MonoBehaviour
 {
-    static int vueltasTotales = 3;
+    static int vueltasTotales;
     static int checkpointsTotales;
     static Text textoCheckpoint;
     static Text textoVuelta;
 
+    public DatosConfig config;
+
     private void Start() {
+
+        // = new Config();
+
+        vueltasTotales = config.vueltasTotales;
 
         checkpointsTotales = ManejarJuego.cantidadCheckpoints();
 
