@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ManejarJuego : MonoBehaviour
 {
@@ -16,15 +17,13 @@ public class ManejarJuego : MonoBehaviour
     static Material checkpointTocado;
     static Material checkpointNoToca;
 
-    DatosConfig config;
-
     static bool terminoVuelta = false;
 
     private void Start()
     {
-        config = Resources.Load<DatosConfig>("Scripts/ConfigNivel1");
+        vueltasTotales = leerVueltasTotalesDeConfig();
 
-        vueltasTotales = config.vueltasTotales;
+        Debug.Log("La cantidad de vueltas en este nivel es: " + vueltasTotales);
 
         inicializarTexturas();
 
@@ -34,6 +33,14 @@ public class ManejarJuego : MonoBehaviour
 
         asignarTextuasIniciales();
         
+    }
+
+    public static int leerVueltasTotalesDeConfig() {
+        DatosConfig config = Resources.Load<DatosConfig>("Scripts/Config");
+
+        int indexEscenaActual = SceneManager.GetActiveScene().buildIndex;
+
+        return config.VueltasPorNivel[indexEscenaActual - 1];
     }
 
     public static int getVueltasTotales() {

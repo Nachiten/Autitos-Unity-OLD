@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class ManejarUI : MonoBehaviour
 {
@@ -10,13 +11,9 @@ public class ManejarUI : MonoBehaviour
     static Text textoCheckpoint;
     static Text textoVuelta;
 
-    DatosConfig config;
-
     private void Start() {
 
-        config = Resources.Load<DatosConfig>("Scripts/ConfigNivel1");
-
-        vueltasTotales = config.vueltasTotales;
+        vueltasTotales = ManejarJuego.leerVueltasTotalesDeConfig();
 
         checkpointsTotales = ManejarJuego.cantidadCheckpoints();
 
