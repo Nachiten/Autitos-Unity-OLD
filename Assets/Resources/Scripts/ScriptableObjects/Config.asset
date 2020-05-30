@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15b8072e6600b0a4eb0ea9ef2ef62cad, type: 3}
   m_Name: Config
   m_EditorClassIdentifier: 
-  VueltasPorNivel: 03000000
+  noeEsTierna: 1
+  VueltasPorNivel: 030000000a000000

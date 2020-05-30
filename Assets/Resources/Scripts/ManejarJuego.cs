@@ -2,11 +2,16 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class ManejarJuego : MonoBehaviour
 {
+
+    // <3
+    public bool noeEsTierna = true;
+
     static int vueltasTotales;
     static int checkpointsTotales;
 
@@ -36,7 +41,7 @@ public class ManejarJuego : MonoBehaviour
     }
 
     public static int leerVueltasTotalesDeConfig() {
-        DatosConfig config = Resources.Load<DatosConfig>("Scripts/Config");
+        DatosConfig config = Resources.Load<DatosConfig>("Scripts/ScriptableObjects/Config");
 
         int indexEscenaActual = SceneManager.GetActiveScene().buildIndex;
 

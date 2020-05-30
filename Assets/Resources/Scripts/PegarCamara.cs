@@ -26,7 +26,6 @@ public class PegarCamara : MonoBehaviour
     // Update is called once per frame
     void LateUpdate()
     {
-
         // Calcula la distancia del jugador
         distancia = Quaternion.AngleAxis(Input.GetAxis("Mouse X") * sensibilidad, Vector3.up) * distancia;
 
