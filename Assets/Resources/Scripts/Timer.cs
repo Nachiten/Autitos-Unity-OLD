@@ -8,7 +8,7 @@ public class Timer : MonoBehaviour
 
     float time;
     public float speed = 1;
-    bool start = true;
+    static bool gano = false;
 
     /* -------------------------------------------------------------------------------- */
 
@@ -18,15 +18,17 @@ public class Timer : MonoBehaviour
         if (timerText == null) {
             Debug.LogError("No pude encontrar el reloj global");
         }
-
-    
     }
 
     /* -------------------------------------------------------------------------------- */
 
+    public static void ganoNivel() {
+        gano = true;
+    }
+
     void Update()
     {
-        if (start)
+        if (!gano)
         {
             time += Time.deltaTime * speed;
 
@@ -41,7 +43,7 @@ public class Timer : MonoBehaviour
 
     /* -------------------------------------------------------------------------------- */
 
-    public void toggleClock(bool valor) { start = valor; }
+    //public void toggleClock(bool valor) { start = valor; }
 
     /* -------------------------------------------------------------------------------- */
 

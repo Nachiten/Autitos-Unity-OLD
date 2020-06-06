@@ -144,6 +144,7 @@ public class ManejarJuego : MonoBehaviour
             if (vueltasActuales + 1 == vueltasTotales)
             {
                 Debug.Log("Ganaste capoeira :D");
+                Timer.ganoNivel();
                 return;
             }
 
