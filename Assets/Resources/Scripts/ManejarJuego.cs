@@ -11,6 +11,7 @@ public class ManejarJuego : MonoBehaviour
 
     // <3
     public bool noeEsTierna = true;
+    static bool gano = false;
 
     static int vueltasTotales;
     static int checkpointsTotales;
@@ -100,7 +101,7 @@ public class ManejarJuego : MonoBehaviour
 
         // Obtener el numero del checkpoint tocado
         int numeroDeCheckpoint = short.Parse(elCheckpoint.name.Substring(elCheckpoint.name.Length - 1));
-        Debug.Log("El numero de checkpoint tocado es: " + numeroDeCheckpoint);
+        //Debug.Log("El numero de checkpoint tocado es: " + numeroDeCheckpoint);
 
         // Es el checkpoint que hay que tocar
         if (numeroDeCheckpoint == checkpointATocar)
@@ -109,13 +110,13 @@ public class ManejarJuego : MonoBehaviour
             // Modifico UI valor de checkpoint tocado
             ManejarUI.valorDeCheckpointA(numeroDeCheckpoint);
 
-            Debug.Log("Tocaste el checkpoint indicado");
+            //Debug.Log("Tocaste el checkpoint indicado");
             checkpointATocar++;
 
             // Ya toque todos los checkpoints
             if (checkpointATocar > checkpointsTotales)
             {
-                Debug.Log("Tocaste ya todos los checkpoint");
+                //Debug.Log("Tocaste ya todos los checkpoint");
                 // Puede tocar la meta desde aca :D
                 terminoVuelta = true;
             }
@@ -130,13 +131,14 @@ public class ManejarJuego : MonoBehaviour
 
         }
         else {
-            Debug.Log("El checkpoint que tocaste no sirve para nada");
+            //Debug.Log("El checkpoint que tocaste no sirve para nada");
         }
     }
 
     public static void verSiGano() {
         if (terminoVuelta)
         {
+            if (gano) return;
 
             // Modificar UI de cantidadVueltas
             ManejarUI.valorDeVueltaA(vueltasActuales + 1);
@@ -145,16 +147,23 @@ public class ManejarJuego : MonoBehaviour
             {
                 Debug.Log("Ganaste capoeira :D");
                 Timer.ganoNivel();
+                Timer.terminoUnaVuelta();
+                gano = true;
                 return;
             }
+            else {
+                Debug.Log("Terminaste la vuelta");
+            }
 
-            Debug.Log("Terminaste la vuelta");
 
             // Reseteo valores iniciales para comenzar siguiente vuelta
             terminoVuelta = false;
             asignarTextuasIniciales();
             checkpointATocar = 1;
             ManejarUI.valorDeCheckpointA(0);
+
+            // Asigno valor a reloj de ultima vuelta
+            Timer.terminoUnaVuelta();
 
             vueltasActuales++;
         }

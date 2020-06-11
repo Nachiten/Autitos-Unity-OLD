@@ -1,22 +1,30 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System.Collections.Specialized;
 
 public class Timer : MonoBehaviour
 {
-    Text timerText;
+    Text timerGlobalText;
+    static Text timerUltVueltaText;
 
-    float time;
-    public float speed = 1;
+    float tiempoGlobal;
+    static float tiempoUltimaVuelta;
     static bool gano = false;
 
     /* -------------------------------------------------------------------------------- */
 
     void Start()
-    { 
-        timerText = GameObject.Find("ValorTiempoGlobal").GetComponent<Text>();
-        if (timerText == null) {
+    {
+        timerGlobalText = GameObject.Find("ValorTiempoGlobal").GetComponent<Text>();
+        if (timerGlobalText == null) {
             Debug.LogError("No pude encontrar el reloj global");
+        }
+
+        timerUltVueltaText = GameObject.Find("ValorTiempoVuelta").GetComponent<Text>();
+        if (timerUltVueltaText == null)
+        {
+            Debug.LogError("No pude encontrar el reloj ultima vuelta");
         }
     }
 
@@ -30,39 +38,44 @@ public class Timer : MonoBehaviour
     {
         if (!gano)
         {
-            time += Time.deltaTime * speed;
+            tiempoGlobal += Time.deltaTime;
+            tiempoUltimaVuelta += Time.deltaTime;
 
-            string minutes = Mathf.Floor((time % 3600) / 60).ToString("00");
-            string seconds = Mathf.Floor(time % 60).ToString("00");
-            string miliseconds = Mathf.Floor(time % 6 * 10 % 10).ToString("0");
+            convertirYEscribirTiempo(tiempoGlobal, timerGlobalText);
 
-            timerText.text = minutes + ":" + seconds + ":" + miliseconds;
+            /*
+            string minutes = Mathf.Floor((tiempoGlobal % 3600) / 60).ToString("00");
+            string seconds = Mathf.Floor(tiempoGlobal % 60).ToString("00");
+            string miliseconds = Mathf.Floor(tiempoGlobal % 6 * 10 % 10).ToString("0");
+            */
+
+            //timerGlobalText.text = minutes + ":" + seconds + ":" + miliseconds;
         }
 
     }
 
-    /* -------------------------------------------------------------------------------- */
+    static void convertirYEscribirTiempo(float unTiempo, Text unTextoUI) {
+        string minutos = Mathf.Floor((unTiempo % 3600) / 60).ToString("00");
+        string segundos = Mathf.Floor(unTiempo % 60).ToString("00");
+        string milisegundos = Mathf.Floor(unTiempo % 6 * 10 % 10).ToString("0");
 
-    //public void toggleClock(bool valor) { start = valor; }
+        unTextoUI.text = minutos + ":" + segundos + ":" + milisegundos;
+    }
 
-    /* -------------------------------------------------------------------------------- */
+    public static void terminoUnaVuelta() {
 
-    float playerPref;
+        Debug.Log("Termino una vuelta");
 
-    public void setPlayerPref()
-    {
+        convertirYEscribirTiempo(tiempoUltimaVuelta, timerUltVueltaText);
 
-        playerPref = PlayerPrefs.GetFloat("Time_" + SceneManager.GetActiveScene().buildIndex);
+        /*
+        string minutes = Mathf.Floor((tiempoUltimaVuelta % 3600) / 60).ToString("00");
+        string seconds = Mathf.Floor(tiempoUltimaVuelta % 60).ToString("00");
+        string miliseconds = Mathf.Floor(tiempoUltimaVuelta % 6 * 10 % 10).ToString("0");
+        */
 
-        Debug.Log(playerPref);
+        // timerUltVueltaText.text = minutes + ":" + seconds + ":" + miliseconds;
 
-        if (time < playerPref || playerPref == 0)
-        {
-            Debug.Log("Guardando player preff de tiempo .....");
-            PlayerPrefs.SetFloat("Time_" + SceneManager.GetActiveScene().buildIndex, time);
-        }
-        else Debug.Log("Tiempo mayor al previamente guardado, no guardando...");
-
-
+        tiempoUltimaVuelta = 0;
     }
 }
