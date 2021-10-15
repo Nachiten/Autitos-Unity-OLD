@@ -1,26 +1,20 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class DetectarColisionCheckpoint : MonoBehaviour
 {
-    // Cuando toca por primera vez
+    private int numeroCheckpoint;
+
+    private void Awake()
+    {
+        // Obtengo el nombre completo del checkpoint
+        var nombrePadre = transform.parent.name;
+
+        // Obtengo el numero de checkpoin
+        numeroCheckpoint = int.Parse(nombrePadre.Split(' ')[1]);
+    }
+    
     void OnTriggerEnter(Collider collision)
     {
-        ManejarJuego.tocarUnCheckpoint(this.gameObject);
+        ManejarJuego.tocarUnCheckpoint(numeroCheckpoint);
     }
-
-    /*
-    // Cuando deja de tocar
-    void OnTriggerExit(Collider collision)
-    {
-        Debug.Log("Dejaste de tocar el checkpoint: " + this.gameObject.name);
-    }
-
-    // Cuando se queda tocando
-    void OnTriggerStay(Collider collision)
-    {
-        Debug.Log("Todavia estas tocando: " + this.gameObject.name);
-    }*/
-
 }

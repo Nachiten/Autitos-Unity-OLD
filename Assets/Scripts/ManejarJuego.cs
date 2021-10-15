@@ -1,16 +1,8 @@
-﻿using JetBrains.Annotations;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class ManejarJuego : MonoBehaviour
 {
-
-    // <3
-    public bool noeEsTierna = true;
     static bool gano = false;
 
     static int vueltasTotales;
@@ -29,24 +21,21 @@ public class ManejarJuego : MonoBehaviour
     {
         vueltasTotales = leerVueltasTotalesDeConfig();
 
-        Debug.Log("La cantidad de vueltas en este nivel es: " + vueltasTotales);
-
         inicializarTexturas();
 
         checkpointsTotales = cantidadCheckpoints();
-
-        Debug.Log("La cantidad de checkpoints en este nivel es: " + checkpointsTotales);
-
+        
         asignarTextuasIniciales();
         
+        Debug.Log("La cantidad de vueltas en este nivel es: " + vueltasTotales + "\nLa cantidad de checkpoints en este nivel es: " + checkpointsTotales);
     }
 
     public static int leerVueltasTotalesDeConfig() {
-        DatosConfig config = Resources.Load<DatosConfig>("Scripts/ScriptableObjects/Config");
+        DatosConfig config = Resources.Load<DatosConfig>("ScriptableObjects/ConfigsNivel");
 
         int indexEscenaActual = SceneManager.GetActiveScene().buildIndex;
 
-        return config.VueltasPorNivel[indexEscenaActual - 1];
+        return 5;
     }
 
     public static int getVueltasTotales() {
@@ -89,56 +78,47 @@ public class ManejarJuego : MonoBehaviour
 
     static void asignarTextuasIniciales() {
 
-        for (int i = 1; i <= checkpointsTotales; i++) {
-            if (i == 1)
-                GameObject.Find("Tubo Checkpoint " + i).GetComponent<MeshRenderer>().material = checkpointProximo;
-            else
-                GameObject.Find("Tubo Checkpoint " + i).GetComponent<MeshRenderer>().material = checkpointNoToca;
+        for (int i = 1; i <= checkpointsTotales; i++)
+        {
+            Material materialAsignado = i == 1 ? checkpointProximo : checkpointNoToca;
+            
+            GameObject.Find("Checkpoint " + i).GetComponent<MaterialAsigner>().assignMaterial(materialAsignado);
         }
     }
 
-    public static void tocarUnCheckpoint(GameObject elCheckpoint) {
+    public static void tocarUnCheckpoint(int numeroDeCheckpoint) {
+        Debug.Log("El numero de checkpoint tocado es: " + numeroDeCheckpoint);
 
-        // Obtener el numero del checkpoint tocado
-        int numeroDeCheckpoint = short.Parse(elCheckpoint.name.Substring(elCheckpoint.name.Length - 1));
-        //Debug.Log("El numero de checkpoint tocado es: " + numeroDeCheckpoint);
+        // Si no es el checkpoint que toca no hago nada
+        if (numeroDeCheckpoint != checkpointATocar) 
+            return;
+        
+        // Modifico UI valor de checkpoint tocado
+        ManejarUI.valorDeCheckpointA(numeroDeCheckpoint);
+            
+        checkpointATocar++;
 
-        // Es el checkpoint que hay que tocar
-        if (numeroDeCheckpoint == checkpointATocar)
+        // Ya toque todos los checkpoints
+        if (checkpointATocar > checkpointsTotales)
         {
-
-            // Modifico UI valor de checkpoint tocado
-            ManejarUI.valorDeCheckpointA(numeroDeCheckpoint);
-
-            //Debug.Log("Tocaste el checkpoint indicado");
-            checkpointATocar++;
-
-            // Ya toque todos los checkpoints
-            if (checkpointATocar > checkpointsTotales)
-            {
-                //Debug.Log("Tocaste ya todos los checkpoint");
-                // Puede tocar la meta desde aca :D
-                terminoVuelta = true;
-            }
-            else
-            {
-                // Se setea el checkpoint siguiente a el color amarillo
-                GameObject.Find("Tubo Checkpoint " + (numeroDeCheckpoint + 1)).GetComponent<MeshRenderer>().material = checkpointProximo;
-            }
-
-            // Se setea el checkpoint actual a ser verde
-            GameObject.Find("Tubo Checkpoint " + numeroDeCheckpoint).GetComponent<MeshRenderer>().material = checkpointTocado;
-
+            // Puede tocar la meta desde aca :D
+            terminoVuelta = true;
         }
-        else {
-            //Debug.Log("El checkpoint que tocaste no sirve para nada");
+        else
+        {
+            // Se setea el checkpoint siguiente a el color amarillo
+            GameObject.Find("Checkpoint " + (numeroDeCheckpoint + 1)).GetComponent<MaterialAsigner>().assignMaterial(checkpointProximo);
         }
+
+        // Seteo el checkpoint ya tocado
+        GameObject.Find("Checkpoint " + numeroDeCheckpoint).GetComponent<MaterialAsigner>().assignMaterial(checkpointTocado);
     }
 
     public static void verSiGano() {
         if (terminoVuelta)
         {
-            if (gano) return;
+            if (gano) 
+                return;
 
             // Modificar UI de cantidadVueltas
             ManejarUI.valorDeVueltaA(vueltasActuales + 1);
@@ -151,11 +131,10 @@ public class ManejarJuego : MonoBehaviour
                 gano = true;
                 return;
             }
-            else {
-                Debug.Log("Terminaste la vuelta");
-            }
-
-
+            
+            
+            Debug.Log("Terminaste la vuelta");
+            
             // Reseteo valores iniciales para comenzar siguiente vuelta
             terminoVuelta = false;
             asignarTextuasIniciales();

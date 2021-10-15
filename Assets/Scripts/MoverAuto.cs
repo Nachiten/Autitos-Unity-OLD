@@ -1,5 +1,4 @@
-﻿using JetBrains.Annotations;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class MoverAuto : MonoBehaviour
